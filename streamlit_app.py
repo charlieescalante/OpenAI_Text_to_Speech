@@ -10,6 +10,37 @@ import wave
 # Use your OpenAI API key. Replace "YOUR_OPENAI_API_KEY" with your key.
 openai.api_key = "YOUR_OPENAI_API_Key"
 
+#-----------
+#1.5 debugging
+#------------
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def text_to_speech(text: str, voice: str = "onyx", model: str = "tts-1") -> bytes:
+    try:
+        # Call OpenAI TTS API
+        logger.debug("Making TTS API call with text: %s", text)
+        response = openai.Audio.create(
+            text=text,
+            voice=voice,
+            model=model,
+            response_format="pcm"
+        )
+        pcm_audio = response["audio_content"]
+        wav_audio = pcm_to_wav(pcm_audio, sample_rate=24000)
+        return wav_audio
+
+    except AttributeError as e:
+        logger.error("AttributeError: %s", e)
+        st.error(f"Error generating TTS audio: {e}")
+        return None
+    except Exception as e:
+        logger.error("Unexpected error: %s", e)
+        st.error(f"An unexpected error occurred: {e}")
+        return None
+
 # -----------------------------------------------------------------------------
 # 2. Text-to-Speech Function: Use OpenAI's Streaming TTS API
 # -----------------------------------------------------------------------------
