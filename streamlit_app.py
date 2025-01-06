@@ -8,7 +8,7 @@ import wave
 # 1. Set up your OpenAI credentials
 # -----------------------------------------------------------------------------
 # Use your OpenAI API key. Replace "YOUR_OPENAI_API_KEY" with your key.
-openai.api_key = "YOUR_OPENAI_API_Key"
+client = OpenAI(api_key=st.secrets['OPENAI_API_Key'])
 
 #-----------
 #1.5 debugging
