@@ -1,10 +1,11 @@
 import streamlit as st
 import openai
+from openai import OpenAI
 from gtts import gTTS
 from io import BytesIO
 
 # Set your OpenAI API key
-openai.api_key = st.secrets['OPENAI_API_Key']
+openai.api_key = st.secrets["OPENAI_API_Key"]
 
 st.title("Simple Text to Speech Converter")
 
@@ -34,15 +35,20 @@ if st.button("Generate my speech"):
         st.warning("Please enter some text or upload from device.")
     else:
         if tts_service == "OpenAI TTS":
-            # Call OpenAI TTS
-            response = openai.Audio.speech.create(
-                model="tts-1",   # Example model name
-                voice="alloy",   # Example voice name
-                input=text_input
+            # Use new OpenAI client-based approach
+            client = OpenAI(api_key=openai.api_key)
+            # Make the request to the TTS endpoint
+            response = client.audio.speech.create(
+                model="tts-1",    # Example model name
+                voice="alloy",    # Example voice name
+                input=text_input,
             )
+
+            # Stream TTS output to an in-memory buffer
             audio_stream = BytesIO()
             response.stream_to_file(audio_stream)
             audio_stream.seek(0)
+
             st.audio(audio_stream, format="audio/mp3")
         else:
             # Fallback or alternative: Google TTS
@@ -50,4 +56,5 @@ if st.button("Generate my speech"):
             audio_stream = BytesIO()
             tts.write_to_fp(audio_stream)
             audio_stream.seek(0)
+
             st.audio(audio_stream)
