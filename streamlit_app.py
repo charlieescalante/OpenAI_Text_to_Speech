@@ -2,7 +2,7 @@ import streamlit as st
 from pathlib import Path
 from openai import OpenAI
 from io import BytesIO
-client = OpenAI(api_key=openai.api_key)
+client = OpenAI(api_key=OpenAI.api_key)
 
 speech_file_path = "steve_jobs_generated.mp3"
 response = client.audio.speech.create(
