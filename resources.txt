@@ -1,5 +1,5 @@
-streamlit
 openai
+streamlit
 requests
 streamlit-js-eval
 gtts
