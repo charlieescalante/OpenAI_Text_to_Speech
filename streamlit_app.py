@@ -1,32 +1,41 @@
 import streamlit as st
 import openai
+import queue
+import io
+import wave
 
 # -----------------------------------------------------------------------------
 # 1. Set up your OpenAI credentials
 # -----------------------------------------------------------------------------
 # Use your OpenAI API key. Replace "YOUR_OPENAI_API_KEY" with your key.
-openai.api_key = "YOUR_OPENAI_API_KEY"
+openai.api_key = "YOUR_OPENAI_API_Key"
 
 # -----------------------------------------------------------------------------
-# 2. Text-to-Speech Function: Use OpenAI's TTS API
+# 2. Text-to-Speech Function: Use OpenAI's Streaming TTS API
 # -----------------------------------------------------------------------------
 def text_to_speech(text: str, voice: str = "onyx", model: str = "tts-1") -> bytes:
     """
-    Convert text to speech using OpenAI's TTS API and return audio bytes.
+    Convert text to speech using OpenAI's streaming TTS API and return WAV audio bytes.
     """
     try:
-        # Call the OpenAI TTS API
-        response = openai.Audio.synthesize(
-            text=text,
-            voice=voice,  # Select one of OpenAI's available voices
-            model=model,  # Use "tts-1" (low-latency) or "tts-1-hd" (higher quality)
-            response_format="pcm"  # Ensure raw PCM data is returned
-        )
+        # Initialize a queue to hold audio chunks
+        audio_queue = queue.Queue()
 
-        # Extract raw PCM audio content
-        pcm_audio = response['audio_content']
+        # Call the OpenAI TTS API with streaming response
+        with openai.Audio.speech.with_streaming_response.create(
+            model=model,
+            voice=voice,
+            input=text,
+            response_format="pcm",  # Return raw PCM data
+        ) as response:
+            # Process streaming audio chunks
+            for audio_chunk in response.iter_bytes(1024):
+                audio_queue.put(audio_chunk)
 
-        # Convert PCM audio into WAV format for Streamlit playback
+        # Combine all audio chunks into a single PCM byte stream
+        pcm_audio = b"".join(list(audio_queue.queue))
+
+        # Convert PCM audio to WAV for browser playback
         wav_audio = pcm_to_wav(pcm_audio, sample_rate=24000)
         return wav_audio
 
@@ -41,9 +50,6 @@ def pcm_to_wav(pcm_data: bytes, sample_rate: int = 24000) -> bytes:
     """
     Convert raw PCM bytes into a WAV file in memory.
     """
-    import io
-    import wave
-
     with io.BytesIO() as wav_io:
         with wave.open(wav_io, 'wb') as wav_file:
             wav_file.setnchannels(1)          # mono
