@@ -1,5 +1,2 @@
 streamlit
-gtts
-IPython
 openai
-pathlib
