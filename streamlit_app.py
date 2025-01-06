@@ -3,7 +3,7 @@ import openai
 import io
 
 # 1) Set the API key from Streamlit secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = st.secrets["OPENAI_API_Key"]
 
 # 2) Title of the app
 st.title("OpenAI Text-to-Speech Demo")
