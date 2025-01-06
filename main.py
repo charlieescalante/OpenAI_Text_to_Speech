@@ -19,6 +19,9 @@ initialize_session_state()
 
 st.title("OpenAI Conversational Chatbot 🤖")
 
+# voice selecter
+voice = st.radio("Select a voice", ["nova", "alloy", "onyx", "echo", "fable", "shimmer"])
+
 # Create footer container for the microphone
 footer_container = st.container()
 with footer_container:
