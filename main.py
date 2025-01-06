@@ -19,6 +19,21 @@ initialize_session_state()
 
 st.title("OpenAI Conversational Chatbot 🤖")
 
+# voice selector
+
+# Center the dropdown
+st.title("OpenAI Conversational Chatbot 🤖")
+st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+
+voice = st.selectbox(
+    "Select a voice:", ["nova", "amber", "onyx"], index=0, label_visibility="collapsed"
+)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+
+# voice selector end
+
 # Create footer container for the microphone
 footer_container = st.container()
 with footer_container:
