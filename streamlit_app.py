@@ -96,7 +96,7 @@ def main():
     # Voice selection
     voice_name = st.selectbox(
         "Select a voice",
-        options=["onyx", "amber", "ruby"],  # Replace with actual available voices
+        options=["Onyx", "Echo", "Alloy", "Fable", "Nova", "Shimmer"],  # Replace with actual available voices
         index=0
     )
 
