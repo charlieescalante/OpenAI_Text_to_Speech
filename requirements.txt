@@ -1,7 +1,4 @@
-openai
 streamlit
-requests
-streamlit-js-eval
 gtts
-io
-pathlib
+IPython
+openai
