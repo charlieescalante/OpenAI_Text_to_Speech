@@ -19,8 +19,25 @@ initialize_session_state()
 
 st.title("OpenAI Conversational Chatbot 🤖")
 
-# voice selecter
-voice = st.radio("Select a voice", ["nova", "alloy", "onyx", "echo", "fable", "shimmer"])
+#--- Voice Selector:
+
+# Horizontal layout for compact controls
+col1, col2 = st.columns([1, 3])  # Adjust column width ratios as needed
+
+with col1:
+    # Voice selection dropdown (compact)
+    voice = st.selectbox("Voice:", ["nova", "alloy", "onyx", "echo", "fable", "shimmer"], index=0)
+
+with col2:
+    # User text input or microphone recorder
+    user_text = st.text_area("Enter text or use the microphone below:")
+
+# Footer container for microphone recorder
+footer_container = st.container()
+with footer_container:
+    audio_bytes = audio_recorder()
+#------ voice selector end-----
+
 
 # Create footer container for the microphone
 footer_container = st.container()
