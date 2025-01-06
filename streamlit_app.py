@@ -3,7 +3,7 @@ import openai
 from pathlib import Path
 
 # 1) Set the API key from Streamlit secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = st.secrets["OPENAI_API_Key"]
 
 # 2) Create the client object
 client = openai.OpenAI()  # (only works for openai<1.0.0 TTS)
